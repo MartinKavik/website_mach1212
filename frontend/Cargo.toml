@@ -4,4 +4,4 @@ name = "frontend"
 edition = "2021"
 
 [dependencies]
-zoon = { git = "https://github.com/MoonZoon/MoonZoon", branch = "main" }
+zoon = { git = "https://github.com/MoonZoon/MoonZoon", branch = "main", features = ["routing"] }

@@ -1,4 +1,3 @@
-use aws_sdk_ec2 as ec2;
 use moon::*;
 
 async fn frontend() -> Frontend {

@@ -1,6 +1,9 @@
 use zoon::{named_color::*, *};
 mod app;
+mod home;
+mod router;
 
 fn main() {
-    start_app("app", app::view::root);
+    router::router();
+    start_app("app", app::root);
 }
