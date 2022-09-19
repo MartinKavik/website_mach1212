@@ -5,5 +5,3 @@ edition = "2021"
 
 [dependencies]
 moon = { git = "https://github.com/MoonZoon/MoonZoon", branch = "main" }
-aws-config = "0.48.0"
-aws-sdk-ec2 = "0.18.0"

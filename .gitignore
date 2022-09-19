@@ -6,4 +6,3 @@ MoonZoonCustom.toml
 frontend_dist/_api
 frontend_dist/index.html
 /Cargo.lock
-/backend/private/
