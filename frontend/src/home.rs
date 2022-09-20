@@ -55,5 +55,5 @@ fn about_z_section() -> impl Element {
 }
 
 fn call_to_action() -> impl Element {
-    El::new().child("Work in progress on the entire site")
+    El::new().child("Work in progress on the entire site. Built in a Rust Framework MoonZoon so development is a bit slow.")
 }
