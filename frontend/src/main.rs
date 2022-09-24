@@ -1,6 +1,5 @@
-use zoon::{named_color::*, *};
+use zoon::{*, start_app};
 mod app;
-mod home;
 mod router;
 
 fn main() {
