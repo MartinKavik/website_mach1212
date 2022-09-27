@@ -55,12 +55,12 @@ fn projects() -> impl Element {
         .s(Align::new().center_x())
         .item(
             El::new()
-                .child("Projects")
+                .child("Public Projects")
                 .s(Align::new().left())
                 .s(Font::new().color(ACCENT).size(SIZE[10])),
         )
-        .item(project("Website", Some("https://github.com/Mach1212/website.git"), Some("https://mpruchn.com"), "The website you are on now. I designed it in figma and created it in MoonZoon, a Rust fullstack web framework. It is currently deployed to netlify, but will be on AWS"))
-        .item(project("Snake", Some("snake_url"), Some("https://mpruchn.com/snake"), "A snake game written in Bevy a Rust game engine"))
+        .item(project("Website", Some("https://github.com/Mach1212/website.git"), Some("https://mpruchn.com"), "The website you are on now. I designed it in figma and created it in MoonZoon, a Rust fullstack web framework. It is currently deployed to netlify, but will be on AWS", ""))
+        .item(project("Snake", Some("snake_url"), Some("https://mpruchn.com/snake"), "A snake game written in Bevy a Rust game engine", ""))
     )
 }
 
@@ -69,9 +69,17 @@ fn project(
     github: Option<&str>,
     url: Option<&str>,
     description: &str,
+    image: &str,
 ) -> impl Element {
     Row::new()
-        .item(Column::new().item(title).items({
+        .item(
+            Column::new().item(
+                Image::new()
+                    .url(public_url(image))
+                    .description("An delightful icon"),
+            ),
+        )
+        .items(Column::new().item(title).items({
             let mut vec = vec![];
 
             if let Some(link) = github {

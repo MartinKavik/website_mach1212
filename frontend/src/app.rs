@@ -62,7 +62,7 @@ pub const ACCENT_TINT: HSLuv = hsluv! {260.9, 96.1, 55.7};
 pub const ACCENT: HSLuv = hsluv! {261.9, 87.7, 47.1};
 // #364fc7
 pub const ACCENT_SHADE: HSLuv = hsluv! {262.5, 79.0, 38.7};
-// #343a40
+// #343a40 #868e96
 pub const TEXT: [HSLuv; 2] = [hsluv! {237.8, 19.6, 24.1}, hsluv! {236.9, 12.3, 58.6}];
 
 pub const SPACING: [u32; 12] = [2, 4, 8, 12, 16, 24, 32, 48, 64, 80, 96, 128];
