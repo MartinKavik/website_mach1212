@@ -28,8 +28,8 @@ pub enum Route {
     Root,
     #[route("home")]
     Home,
-    #[route("blog")]
-    Blog,
+    #[route("projects")]
+    Projects,
 }
 
 #[static_ref]
@@ -50,7 +50,7 @@ pub fn router() -> &'static Router<Route> {
         match route {
             Route::Root => router().go("home"),
             Route::Home => app::set_page_id(PageId::Home),
-            Route::Blog => app::set_page_id(PageId::Blog),
+            Route::Projects => app::set_page_id(PageId::Projects),
         }
     })
 }

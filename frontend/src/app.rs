@@ -1,16 +1,22 @@
 use crate::web_sys::HtmlAnchorElement;
 use zoon::button::OnPressFlagNotSet;
+use zoon::column::EmptyFlagNotSet;
 use zoon::el::ChildFlagSet;
-use zoon::link::ToFlagSet;
 use zoon::web_sys::{HtmlDivElement, HtmlElement};
+use zoon::FontWeight::{Bold, Medium};
 use zoon::*;
 
 mod home;
+mod projects;
+
+/***************************************/
+/* Routing                             */
+/***************************************/
 
 #[derive(Clone, Copy, PartialEq, PartialOrd)]
 pub enum PageId {
     Home,
-    Blog,
+    Projects,
     Unknown,
 }
 
@@ -31,17 +37,13 @@ pub fn set_page_id(new_page_id: PageId) {
 fn page() -> impl Element {
     El::new().child_signal(page_id().signal().map(|page_id| match page_id {
         PageId::Home => home::page().into_raw_element(),
-        PageId::Blog => El::new().child("Blog").into_raw_element(),
+        PageId::Projects => projects::page().into_raw_element(),
         PageId::Unknown => El::new().child("404").into_raw_element(),
     }))
 }
 
-pub fn root() -> impl Element {
-    Column::new().item(page())
-}
-
 /***************************************/
-/* Constants                          */
+/* Constants                           */
 /***************************************/
 
 pub const BACKGROUND: [HSLuv; 3] = [
@@ -52,6 +54,8 @@ pub const BACKGROUND: [HSLuv; 3] = [
     // #e9ecef
     hsluv! {235.8, 17.2, 93.3},
 ];
+
+pub const CORNER_RADIUS: u32 = 9;
 
 pub const PAGE_WIDTH: u32 = 1500;
 // #edf2ff
@@ -69,17 +73,65 @@ pub const SPACING: [u32; 12] = [2, 4, 8, 12, 16, 24, 32, 48, 64, 80, 96, 128];
 pub const SIZE: [u32; 15] = [10, 12, 14, 16, 18, 20, 24, 30, 36, 44, 52, 62, 74, 86, 98];
 
 /***************************************/
-/* Components                          */
+/* Global styles                         */
 /***************************************/
 
-pub fn section<T: Element>(
+pub fn root() -> impl Element {
+    Column::new()
+        .item(
+            section(ACCENT_BACK, 0, header()).s(Padding::new().top(SPACING[3]).bottom(SPACING[3])),
+        )
+        .item(page())
+    // .item(footer())
+}
+
+fn header<'a>() -> impl Element + Styleable<'a> {
+    Row::new()
+        .s(Font::new()
+            .size(SIZE[5])
+            .weight(FontWeight::SemiBold)
+            .color(ACCENT))
+        .item(
+            Link::new()
+                .label(
+                    El::new()
+                        .s(Font::new().size(SIZE[8]).color(ACCENT))
+                        .child("MP"),
+                )
+                .to("home"),
+        )
+        .item(Spacer::fill())
+        .item(
+            Row::new()
+                .s(Gap::new().x(SPACING[7]))
+                .item(Link::new().label("Home").to("home"))
+                .item(Link::new().label("Projects").to("projects")),
+        )
+        .item(Spacer::fill())
+        .item(make_button(
+            "Email Me",
+            ACCENT_BACK,
+            ACCENT,
+            ACCENT_SHADE,
+            || {},
+        ))
+}
+
+// fn footer() -> impl Element {}
+
+/***************************************/
+/* Components                          */
+/***************************************/
+pub fn section<'a, T: Element + Styleable<'a>>(
     background: HSLuv,
+    top_padding: u32,
     child: T,
 ) -> El<ChildFlagSet, RawHtmlEl<HtmlElement>> {
     El::new()
+        .s(Width::fill())
         .s(Background::new().color(background))
-        .s(Padding::new().x(SPACING[2]))
-        .child(child)
+        .s(Padding::new().x(SPACING[2]).top(top_padding))
+        .child(child.s(Width::fill().max(PAGE_WIDTH)).s(Align::center()))
 }
 
 pub fn make_button(
@@ -87,7 +139,8 @@ pub fn make_button(
     color: HSLuv,
     background: HSLuv,
     background_active: HSLuv,
-) -> Button<button::LabelFlagSet, button::OnPressFlagNotSet, RawHtmlEl<HtmlDivElement>> {
+    on_click: impl FnMut() + 'static,
+) -> Button<button::LabelFlagSet, OnPressFlagNotSet, RawHtmlEl<HtmlDivElement>> {
     let (hovered, hovered_signal) = Mutable::new_and_signal(false);
     Button::new()
         .label(label)
@@ -95,15 +148,19 @@ pub fn make_button(
         .s(Background::new()
             .color_signal(hovered_signal.map_bool(move || background_active, move || background)))
         .s(RoundedCorners::all(9))
-        .s(Font::new().color(color))
+        .s(Font::new().color(color).no_wrap())
+        .s(Transitions::new([
+            Transition::background_color().duration(500)
+        ]))
         .on_hovered_change(move |change| hovered.set_neq(change))
+        .on_click(on_click)
 }
 
 pub fn make_link(
     label: &str,
     link: &str,
     width: u32,
-) -> Link<link::LabelFlagSet, ToFlagSet, RawHtmlEl<HtmlAnchorElement>> {
+) -> Link<link::LabelFlagSet, link::ToFlagSet, RawHtmlEl<HtmlAnchorElement>> {
     Link::new()
         .label(
             Row::new().item(label).item(
@@ -114,4 +171,21 @@ pub fn make_link(
             ),
         )
         .to(link)
+}
+
+pub fn svg_link(
+    svg: &str,
+    link: &str,
+    description: &str,
+    width: u32,
+) -> Link<link::LabelFlagSet, link::ToFlagSet, RawHtmlEl<HtmlAnchorElement>> {
+    Link::new()
+        .label(
+            Image::new()
+                .s(Width::exact(width))
+                .url(public_url(svg))
+                .description(description),
+        )
+        .to(link)
+        .new_tab(NewTab::new().follow(true))
 }
