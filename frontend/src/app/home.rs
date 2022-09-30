@@ -1,14 +1,18 @@
-use zoon::named_color::GRAY_4;
+use zoon::named_color::{GRAY_4, TRANSPARENT};
 use zoon::*;
 
 use crate::app::{
-    svg_link, ACCENT, ACCENT_BACK, ACCENT_SHADE, BACKGROUND, CORNER_RADIUS, SIZE, SPACING, TEXT,
+    ACCENT, ACCENT_BACK, ACCENT_SHADE, BACKGROUND, CORNER_RADIUS, SIZE, SPACING, TEXT,
 };
 
 pub fn page() -> impl Element {
     Column::new()
         .s(Font::new().color(TEXT[0]).size(SIZE[6]))
         .item(introduction())
+        .item(education())
+        .item(experience())
+        .item(languages())
+        .item(resumes())
         .item(call_to_action())
 }
 
@@ -60,6 +64,38 @@ fn introduction() -> impl Element {
     )
 }
 
+fn education() -> impl Element {
+    super::section(
+        TRANSPARENT,
+        SPACING[4],
+        Column::new().item(super::h2("Education")),
+    )
+}
+
+fn experience() -> impl Element {
+    super::section(
+        TRANSPARENT,
+        SPACING[4],
+        Column::new().item(super::h2("Experiences")),
+    )
+}
+
+fn languages() -> impl Element {
+    super::section(
+        TRANSPARENT,
+        SPACING[4],
+        Column::new().item(super::h2("Languages")),
+    )
+}
+
+fn resumes() -> impl Element {
+    super::section(
+        TRANSPARENT,
+        SPACING[4],
+        Column::new().item(super::h2("Resumes")),
+    )
+}
+
 fn call_to_action() -> impl Element {
-    super::section(BACKGROUND[0], 0, El::new().child("Work in progress on the entire site. Built in a Rust framework MoonZoon so development is a bit slow."))
+    super::section(TRANSPARENT, SPACING[6], El::new().child("Work in progress on the entire site. Built in a Rust framework MoonZoon so development is a bit slow."))
 }

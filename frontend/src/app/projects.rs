@@ -1,4 +1,5 @@
 use crate::app::{svg_link, ACCENT, ACCENT_BACK, BACKGROUND, CORNER_RADIUS, SIZE, SPACING, TEXT};
+use zoon::named_color::TRANSPARENT;
 use zoon::*;
 
 pub fn page() -> impl Element {
@@ -8,14 +9,12 @@ pub fn page() -> impl Element {
 }
 
 fn projects() -> impl Element {
-    super::section(BACKGROUND[0], SPACING[4], Column::new()
+    super::section(TRANSPARENT, SPACING[4], Column::new()
         .item(
-            El::new()
-                .child("Public Projects")
-                .s(Font::new().color(ACCENT).size(SIZE[10])),
+            super::h2("Public Projects"),
         )
         .item(Column::new().s(Gap::new().y(SPACING[4])).s(Padding::new().top(SPACING[5]))
-            .item(project("Website", "The website you are on now. I designed it in Figma and created it in MoonZoon, a Rust fullstack web framework. It is currently deployed to Netlify, but will be on AWS via the CDK", Some("https://github.com/Mach1212/website.git"), None, ""))
+            .item(project("Website", "The website you are on now. I designed it in Figma and created it in MoonZoon, a Rust fullstack web framework. It is currently deployed to Netlify, but will be on AWS via the CDK", Some("https://github.com/Mach1212/website.git"), None, "mzoon.svg"))
             .item(project("Snake", "A snake game written in Bevy a Rust game engine", Some("snake_url"), Some("https://mpruchn.com/snake"), ""))
         ))
 }
@@ -28,12 +27,13 @@ fn project(
     image: &str,
 ) -> impl Element {
     Row::new()
+        .s(Gap::both(SPACING[5]))
         .s(Padding::new().x(SPACING[7]).y(SPACING[6]))
         .s(Background::new().color(ACCENT_BACK))
         .s(RoundedCorners::all(CORNER_RADIUS))
         .item(
             Column::new()
-                .s(Width::fill())
+                .s(Width::percent(50))
                 .s(Gap::both(SPACING[3]))
                 .item(Row::new().s(Gap::both(SPACING[4])).items({
                     let mut vec = vec![];
@@ -55,10 +55,10 @@ fn project(
                 )
                 .item(El::new().child(description)),
         )
-        .item(Spacer::growable())
         .item(
-            Column::new().item(
+            Column::new().s(Width::percent(50)).item(
                 Image::new()
+                    .s(RoundedCorners::all(CORNER_RADIUS))
                     .url(public_url(image))
                     .description("An intriguing image"),
             ),

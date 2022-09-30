@@ -78,9 +78,7 @@ pub const SIZE: [u32; 15] = [10, 12, 14, 16, 18, 20, 24, 30, 36, 44, 52, 62, 74,
 
 pub fn root() -> impl Element {
     Column::new()
-        .item(
-            section(ACCENT_BACK, 0, header()).s(Padding::new().top(SPACING[3]).bottom(SPACING[3])),
-        )
+        .item(section(ACCENT_BACK, 0, header()))
         .item(page())
     // .item(footer())
 }
@@ -91,6 +89,7 @@ fn header<'a>() -> impl Element + Styleable<'a> {
             .size(SIZE[5])
             .weight(FontWeight::SemiBold)
             .color(ACCENT))
+        .s(Padding::new().top(SPACING[3]).bottom(SPACING[3]))
         .item(
             Link::new()
                 .label(
@@ -174,18 +173,26 @@ pub fn make_link(
 }
 
 pub fn svg_link(
-    svg: &str,
+    svg_url: &str,
     link: &str,
     description: &str,
     width: u32,
 ) -> Link<link::LabelFlagSet, link::ToFlagSet, RawHtmlEl<HtmlAnchorElement>> {
     Link::new()
-        .label(
-            Image::new()
-                .s(Width::exact(width))
-                .url(public_url(svg))
-                .description(description),
-        )
+        .label(svg(width, svg_url, description))
         .to(link)
         .new_tab(NewTab::new().follow(true))
+}
+
+pub fn svg(width: u32, svg_url: &str, description: &str) -> impl Element {
+    Image::new()
+        .s(Width::exact(width))
+        .url(public_url(svg_url))
+        .description(description)
+}
+
+pub fn h2(text: &str) -> impl Element {
+    El::new()
+        .child(text)
+        .s(Font::new().color(ACCENT).size(SIZE[10]))
 }
