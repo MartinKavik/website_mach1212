@@ -1,6 +1,7 @@
-use crate::app::{svg_link, ACCENT, ACCENT_BACK, BACKGROUND, CORNER_RADIUS, SIZE, SPACING, TEXT};
 use zoon::named_color::TRANSPARENT;
 use zoon::*;
+
+use crate::app::{svg_link, ACCENT_BACK, CORNER_RADIUS, SIZE, SPACING, TEXT};
 
 pub fn page() -> impl Element {
     Column::new()
@@ -35,6 +36,7 @@ fn project(
             Column::new()
                 .s(Width::percent(50))
                 .s(Gap::both(SPACING[3]))
+                .s(Align::new().top().left())
                 .item(Row::new().s(Gap::both(SPACING[4])).items({
                     let mut vec = vec![];
 
@@ -56,7 +58,7 @@ fn project(
                 .item(El::new().child(description)),
         )
         .item(
-            Column::new().s(Width::percent(50)).item(
+            El::new().s(Align::new().right()).s(Height::fill()).child(
                 Image::new()
                     .s(RoundedCorners::all(CORNER_RADIUS))
                     .url(public_url(image))
